@@ -1,0 +1,50 @@
+<launch>
+    <arg name="speed" default="0"/>
+    <arg name="publish_raw" default="false"/>
+    
+    <arg name="kp" default="0" />
+    <arg name="ki" default="0" />
+    <arg name="kd" default="0" />
+
+    <param name="topic_name_camera_image" value="camera/image" />
+    <param name="topic_name_camera_info" value="camera/camera_info" />
+    <param name="topic_name_position_error" value="position/error" />
+    <param name="topic_name_position_track" value="position/track" />
+    <param name="topic_name_manual_mode" value="control/manual_mode" />
+    <param name="topic_name_control" value="control" />
+    <param name="topic_name_vesc_teleop" value="/vesc/ackermann_cmd_mux/input/teleop" />
+
+    <include file="$(find racecar_gazebo)/launch/raceon.launch">
+        <arg name="world_name" value="raceon_race0"/>
+    </include>
+
+    <node pkg="raceon" name="pos_estimation" type="pos_estimation.py" output="screen">
+        <param name="~scan_line" value="190" />
+        <param name="~peak_threshold" value="160" />
+        <param name="~track_width" value="500" />
+        <param name="~camera_center" value="320" />
+    </node>
+
+    <node pkg="raceon" name="control" type="control.py" output="log">
+        <param name="~motor_speed" value="$(arg speed)" />
+        <param name="~steering_speed" value="160" />
+        <param name="~target" value="0" />
+        <param name="~kp" value="$(arg kp)" />
+        <param name="~ki" value="$(arg ki)" />
+        <param name="~kd" value="$(arg kd)" />
+    </node>
+
+    <node pkg="raceon_simulation" name="racecar_actuation" type="racecar_actuation.py" output="screen" />
+
+    <node pkg="raceon_visualizer" name="visualizer" type="visualizer.py" output="log">
+        <param name="~topic_name_camera_image" value="camera/image" />
+        <param name="~topic_name_position_error" value="position/error" />
+        <param name="~topic_name_position_track" value="position/track" />
+        <param name="~topic_name_control" value="control" />
+        <param name="~topic_name_manual_mode" value="control/manual_mode" />
+        <param name="~param_name_scan_line" value="pos_estimation/scan_line" />
+        <param name="~param_name_track_width" value="pos_estimation/track_width" />
+        <param name="~param_name_camera_center" value="pos_estimation/camera_center" />
+        <param name="~default_speed" value="160" />
+    </node>
+</launch>
