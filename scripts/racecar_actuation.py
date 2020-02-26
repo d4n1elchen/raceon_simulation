@@ -22,44 +22,38 @@ class Actuator():
 
     def stop(self):
         rospy.loginfo("Stop the car ...")
-
-	msg = AckermannDriveStamped();
-	msg.header.stamp = rospy.Time.now();
-	msg.header.frame_id = "base_link";
-
-	msg.drive.speed = 0
-	msg.drive.acceleration = 1
-	msg.drive.jerk = 1
-	msg.drive.steering_angle = 0
-	msg.drive.steering_angle_velocity = 1
-
-	self.pub_vesc.publish(msg)
+        self.drive(0, 0)
 
     def control_callback(self, control_msg):
         servo_pos = control_msg.steering_angle
-        control_speed = control_msg.speed
+        motor_speed = control_msg.speed
 
-        servo_radius = servo_pos/SERVO_LEFT * np.pi
-        # limit [-60, 60] degs
-        if servo_radius > 45*np.pi/180:
-		servo_radius = 45*np.pi/180
-	if servo_radius < -45*np.pi/180:
-		servo_radius = -45*np.pi/180
+        rospy.loginfo("Control command received: servo_pos = " + str(servo_pos) + ", motor_speed = " + str(motor_speed))
 
-        motor_speed = control_speed / 200
+        self.drive(motor_speed, servo_pos)
 
-        rospy.loginfo("Control command received: servo_pos = " + str(servo_pos) + ", motor_speed = " + str(control_speed))
+
+    def drive(self, motor_speed, servo_pos):
+        # servo command map to degree [-30, 30] in radius
+        servo_radius = - servo_pos/SERVO_RIGHT * 30 * np.pi/180
+
+        # speed gain
+        motor_speed /= 200
+
         rospy.loginfo("Convert into vesc command: steering_angle = " + str(servo_radius) + ", speed = " + str(motor_speed))
 
 	msg = AckermannDriveStamped();
 	msg.header.stamp = rospy.Time.now();
 	msg.header.frame_id = "base_link";
 
+        speed_dir = 1 if motor_speed > 0 else -1
+        steering_dir = 1 if servo_radius > 0 else -1
+
 	msg.drive.speed = motor_speed
-	msg.drive.acceleration = 100 * np.sign(motor_speed)
+	msg.drive.acceleration = 10000 * speed_dir
 	msg.drive.jerk = 0
 	msg.drive.steering_angle = servo_radius
-	msg.drive.steering_angle_velocity = 100 * np.sign(servo_radius)
+	msg.drive.steering_angle_velocity = 10000 * steering_dir
 
 	self.pub_vesc.publish(msg)
 
