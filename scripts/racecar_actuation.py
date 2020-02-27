@@ -46,14 +46,11 @@ class Actuator():
 	msg.header.stamp = rospy.Time.now();
 	msg.header.frame_id = "base_link";
 
-        speed_dir = 1 if motor_speed > 0 else -1
-        steering_dir = 1 if servo_radius > 0 else -1
-
 	msg.drive.speed = motor_speed
-	msg.drive.acceleration = 10000 * speed_dir
+	msg.drive.acceleration = 1e9 * np.sign(motor_speed)
 	msg.drive.jerk = 0
 	msg.drive.steering_angle = servo_radius
-	msg.drive.steering_angle_velocity = 10000 * steering_dir
+	msg.drive.steering_angle_velocity = 1e9 * np.sign(servo_radius)
 
 	self.pub_vesc.publish(msg)
 
