@@ -11,6 +11,7 @@
     <param name="topic_name_position_track" value="position/track" />
     <param name="topic_name_manual_mode" value="control/manual_mode" />
     <param name="topic_name_control" value="control" />
+
     <param name="topic_name_vesc_teleop" value="/vesc/ackermann_cmd_mux/input/teleop" />
 
     <include file="$(find racecar_gazebo)/launch/raceon.launch">
@@ -18,9 +19,9 @@
     </include>
 
     <node pkg="raceon" name="pos_estimation" type="pos_estimation.py" output="log">
-        <param name="~scan_line" value="200" />
+        <param name="~scan_line" value="190" />
         <param name="~peak_threshold" value="140" />
-        <param name="~track_width" value="560" />
+        <param name="~track_width" value="500" />
         <param name="~camera_center" value="320" />
     </node>
 
