@@ -25,6 +25,16 @@ source ~/raceon_sim_ws/devel/setup.bash
 echo "source ~/raceon_sim_ws/devel/setup.bash" >> ~/.bashrc
 ```
 
+## Set ROS_PYTHON_VERSION to 3
+```
+export ROS_PYTHON_VERSION=3
+```
+
+(Optional) Add it to bashrc
+```
+echo "export ROS_PYTHON_VERSION=3" >> ~/.bashrc
+```
+
 ## Install dependencies
 
 ```shell
@@ -39,7 +49,7 @@ git clone https://github.com/wjwwood/serial.git
 git clone https://github.com/ros-drivers/ackermann_msgs.git
 git clone https://github.com/mit-racecar/racecar.git
 git clone https://github.com/mit-racecar/vesc.git
-git clone https://github.com/d4n1elchen/raceon-ros.git raceon
+git clone https://github.com/d4n1elchen/raceon.git
 git clone https://github.com/d4n1elchen/raceon_simulation.git
 git clone https://github.com/d4n1elchen/raceon_visualizer.git
 git clone https://github.com/d4n1elchen/racecar_gazebo.git
