@@ -25,6 +25,16 @@ source ~/raceon_sim_ws/devel/setup.bash
 echo "source ~/raceon_sim_ws/devel/setup.bash" >> ~/.bashrc
 ```
 
+## Set ROS_PYTHON_VERSION to 3
+```
+export ROS_PYTHON_VERSION=3
+```
+
+(Optional) Add it to bashrc
+```
+echo "export ROS_PYTHON_VERSION=3" >> ~/.bashrc
+```
+
 ## Install dependencies
 
 ```shell
