@@ -38,7 +38,7 @@ class Actuator():
         servo_radius = - servo_pos/SERVO_RIGHT * 30 * np.pi/180
 
         # speed gain
-        motor_speed /= 100
+        motor_speed /= 200
 
         rospy.loginfo("Convert into vesc command: steering_angle = " + str(servo_radius) + ", speed = " + str(motor_speed))
 
