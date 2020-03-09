@@ -38,7 +38,8 @@ echo "export ROS_PYTHON_VERSION=3" >> ~/.bashrc
 ## Install dependencies
 
 ```shell
-sudo apt-get install ros-melodic-ros-control ros-melodic-gazebo-ros-control ros-melodic-ros-controllers python3-opencv
+sudo apt-get install ros-melodic-ros-control ros-melodic-gazebo-ros-control ros-melodic-ros-controllers python3-opencv ros-melodic-ackermann-msgs
+pip3 install pynput
 ```
 
 ## Clone dependencies
