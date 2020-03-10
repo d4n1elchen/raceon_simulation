@@ -19,7 +19,7 @@
     </include>
 
     <node pkg="raceon" name="pos_estimation" type="pos_estimation.py" output="log">
-        <param name="~scan_line" value="190" />
+        <param name="~scan_line" value="180" />
         <param name="~peak_threshold" value="140" />
         <param name="~track_width" value="500" />
         <param name="~camera_center" value="320" />
