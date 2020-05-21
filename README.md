@@ -6,6 +6,16 @@ ROS Melodic
 
 Make sure you have gazebo installed. If you install your ROS with `desktop-full` release, you should be fine.
 
+## Set ROS_PYTHON_VERSION to 3
+```
+export ROS_PYTHON_VERSION=3
+```
+
+(Optional) Add it to bashrc
+```
+echo "export ROS_PYTHON_VERSION=3" >> ~/.bashrc
+```
+
 ## Make a workspace for simulation
 
 ```shell
@@ -23,16 +33,6 @@ source ~/raceon_sim_ws/devel/setup.bash
 (Optional) Add it to bashrc
 ```
 echo "source ~/raceon_sim_ws/devel/setup.bash" >> ~/.bashrc
-```
-
-## Set ROS_PYTHON_VERSION to 3
-```
-export ROS_PYTHON_VERSION=3
-```
-
-(Optional) Add it to bashrc
-```
-echo "export ROS_PYTHON_VERSION=3" >> ~/.bashrc
 ```
 
 ## Install dependencies
