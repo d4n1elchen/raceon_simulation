@@ -38,7 +38,7 @@ echo "source ~/raceon_sim_ws/devel/setup.bash" >> ~/.bashrc
 ## Install dependencies
 
 ```shell
-sudo apt-get install ros-melodic-ros-control ros-melodic-gazebo-ros-control ros-melodic-ros-controllers python3-opencv ros-melodic-ackermann-msgs
+sudo apt-get install ros-melodic-ros-control ros-melodic-gazebo-ros-control ros-melodic-ros-controllers python3-opencv ros-melodic-ackermann-msgs python3-empy
 pip3 install pynput
 ```
 
