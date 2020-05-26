@@ -2,6 +2,7 @@
 
 import rospy
 import roslaunch
+from std_msgs.msg import Int8
 
 rospy.init_node('simulation_worker', anonymous=True)
 
@@ -19,6 +20,12 @@ launch.start()
 # Start timer node
 node = roslaunch.core.Node('raceon_simulation', 'lap_timer.py', output='screen')
 launch.launch(node)
+
+def count_callback(msg):
+    if msg.data > 0:
+        launch.stop()
+
+rospy.Subscriber('/simulation/lap_count', Int8, count_callback, queue_size=10)
 
 try:
   launch.spin()
