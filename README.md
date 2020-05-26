@@ -6,6 +6,16 @@ ROS Melodic
 
 Make sure you have gazebo installed. If you install your ROS with `desktop-full` release, you should be fine.
 
+## Set ROS_PYTHON_VERSION to 3
+```
+export ROS_PYTHON_VERSION=3
+```
+
+(Optional) Add it to bashrc
+```
+echo "export ROS_PYTHON_VERSION=3" >> ~/.bashrc
+```
+
 ## Make a workspace for simulation
 
 ```shell
@@ -25,20 +35,10 @@ source ~/raceon_sim_ws/devel/setup.bash
 echo "source ~/raceon_sim_ws/devel/setup.bash" >> ~/.bashrc
 ```
 
-## Set ROS_PYTHON_VERSION to 3
-```
-export ROS_PYTHON_VERSION=3
-```
-
-(Optional) Add it to bashrc
-```
-echo "export ROS_PYTHON_VERSION=3" >> ~/.bashrc
-```
-
 ## Install dependencies
 
 ```shell
-sudo apt-get install ros-melodic-ros-control ros-melodic-gazebo-ros-control ros-melodic-ros-controllers python3-opencv ros-melodic-ackermann-msgs
+sudo apt-get install ros-melodic-ros-control ros-melodic-gazebo-ros-control ros-melodic-ros-controllers python3-opencv ros-melodic-ackermann-msgs python3-empy
 pip3 install pynput
 ```
 
