@@ -1,0 +1,60 @@
+<launch>
+    <arg name="speed" default="580"/>
+    <arg name="steering_speed" default="250"/>
+    
+    <arg name="kp" default="5" />
+    <arg name="ki" default="1.2" />
+    <arg name="kd" default="0.4" />
+
+    <arg name="turn_kp" default="10" />
+    <arg name="turn_ki" default="20" />
+    <arg name="turn_kd" default="0.1" />
+    
+    <param name="topic_name_camera_image" value="camera/image" />
+    <param name="topic_name_camera_info" value="camera/camera_info" />
+    <param name="topic_name_position_pose" value="position/pose" />
+    <param name="topic_name_position_track" value="position/track" />
+    <param name="topic_name_manual_mode" value="control/manual_mode" />
+    <param name="topic_name_control" value="control" />
+
+    <include file="$(find racecar_gazebo)/launch/raceon.launch">
+        <arg name="world_name" value="raceon_race1"/>
+    </include>
+
+    <node pkg="raceon" name="pos_estimation" type="pos_estimation.py" output="log">
+        <param name="~scan_line_d" value="140" />
+        <param name="~scan_line_u" value="80" />
+        <param name="~peak_threshold_d" value="140" />
+        <param name="~peak_threshold_u" value="100" />
+        <param name="~track_width" value="500" />
+        <param name="~camera_center" value="320" />
+        <param name="~breaker" value="0" />
+    </node>
+
+    <node pkg="raceon" name="control" type="control.py" output="log">
+        <param name="~motor_speed" value="$(arg speed)" />
+        <param name="~steering_speed" value="$(arg steering_speed)" />
+        <param name="~target" value="0" />
+        <param name="~kp" value="$(arg kp)" />
+        <param name="~ki" value="$(arg ki)" />
+        <param name="~kd" value="$(arg kd)" />
+        <param name="~turn_kp" value="$(arg turn_kp)" />
+        <param name="~turn_ki" value="$(arg turn_ki)" />
+        <param name="~turn_kd" value="$(arg turn_kd)" />
+    </node>
+
+    <node pkg="raceon_simulation" name="racecar_actuation" type="racecar_actuation.py" output="log" />
+
+    <node pkg="raceon_visualizer" name="visualizer" type="visualizer.py" output="screen">
+            <param name="~topic_name_camera_image" value="camera/image" />
+            <param name="~topic_name_position_error" value="position/error" />
+            <param name="~topic_name_position_track" value="position/track" />
+            <param name="~topic_name_control" value="control" />
+            <param name="~topic_name_manual_mode" value="control/manual_mode" />
+            <param name="~param_name_scan_line_d" value="pos_estimation/scan_line_d" />
+            <param name="~param_name_scan_line_u" value="pos_estimation/scan_line_u" />
+            <param name="~param_name_track_width" value="pos_estimation/track_width" />
+            <param name="~param_name_camera_center" value="pos_estimation/camera_center" />
+    </node>
+
+</launch>

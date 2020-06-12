@@ -1,0 +1,21 @@
+<launch>
+    <arg name="speed" default="580"/>
+    
+    <arg name="kp" default="5" />
+    <arg name="ki" default="1.2" />
+    <arg name="kd" default="0.4" />
+
+    <param name="topic_name_manual_mode" value="control/manual_mode" />
+    <param name="topic_name_control" value="control" />
+
+    <include file="$(find raceon_simulation)/launch/raceon_simulation_pos_est.launch"></include>
+
+    <node pkg="raceon" name="control" type="control.py" output="log">
+        <param name="~motor_speed" value="$(arg speed)" />
+        <param name="~steering_speed" value="160" />
+        <param name="~target" value="0" />
+        <param name="~kp" value="$(arg kp)" />
+        <param name="~ki" value="$(arg ki)" />
+        <param name="~kd" value="$(arg kd)" />
+    </node>
+</launch>

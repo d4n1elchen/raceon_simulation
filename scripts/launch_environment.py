@@ -3,13 +3,14 @@
 import rospy
 import roslaunch
 from std_msgs.msg import Int8
+from raceon_simulation.msg import LapFinish
 
 rospy.init_node('simulation_worker', anonymous=True)
 
 uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
 roslaunch.configure_logging(uuid)
 
-cli_args = ['raceon_simulation', 'raceon_simulation.launch', 'speed:=200', 'kp:=10']
+cli_args = ['raceon_simulation', 'raceon_simulation_pos_est_pid.launch', 'speed:=200', 'kp:=0.10']
 roslaunch_file = roslaunch.rlutil.resolve_launch_arguments(cli_args)[0]
 roslaunch_args = cli_args[2:]
 
@@ -21,11 +22,11 @@ launch.start()
 node = roslaunch.core.Node('raceon_simulation', 'lap_timer.py', output='screen')
 launch.launch(node)
 
-def count_callback(msg):
-    if msg.data > 0:
-        launch.stop()
+def finish_callback(msg):
+    print('Lap {}, time = {}'.format('success' if msg.success else 'failed', msg.time))
+    launch.stop()
 
-rospy.Subscriber('/simulation/lap_count', Int8, count_callback, queue_size=10)
+rospy.Subscriber('/simulation/lap_finish', LapFinish, finish_callback, queue_size=10)
 
 try:
   launch.spin()

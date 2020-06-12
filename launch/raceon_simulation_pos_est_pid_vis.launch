@@ -1,0 +1,26 @@
+<launch>
+    <arg name="speed" default="580"/>
+    
+    <arg name="kp" default="5" />
+    <arg name="ki" default="1.2" />
+    <arg name="kd" default="0.4" />
+
+    <include file="$(find raceon_simulation)/launch/raceon_simulation_pos_est_pid.launch">
+        <arg name="speed" value="$(arg speed)"/>
+        <arg name="kp" value="$(arg kp)" />
+        <arg name="ki" value="$(arg ki)" />
+        <arg name="kd" value="$(arg kd)" />
+    </include>
+
+    <node pkg="raceon_visualizer" name="visualizer" type="visualizer.py" output="screen">
+        <param name="~topic_name_camera_image" value="camera/image" />
+        <param name="~topic_name_position_pose" value="position/pose" />
+        <param name="~topic_name_position_track" value="position/track" />
+        <param name="~topic_name_control" value="control" />
+        <param name="~topic_name_manual_mode" value="control/manual_mode" />
+        <param name="~param_name_scan_line" value="pos_estimation/scan_line" />
+        <param name="~param_name_track_width" value="pos_estimation/track_width" />
+        <param name="~param_name_camera_center" value="pos_estimation/camera_center" />
+        <param name="~default_speed" value="160" />
+    </node>
+</launch>
