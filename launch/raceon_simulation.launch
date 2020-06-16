@@ -6,7 +6,9 @@
     <param name="topic_name_vesc_teleop" value="/vesc/ackermann_cmd_mux/input/teleop" />
 
     <include file="$(find racecar_gazebo)/launch/raceon.launch">
-        <arg name="world_name" value="raceon_race1"/>
+        <arg name="world_name" value="raceon_empty"/>
+        <arg name="gui" value="true"/>
+        <arg name="paused" value="true"/>
     </include>
 
     <node pkg="raceon_simulation" name="racecar_actuation" type="racecar_actuation.py" output="log" />

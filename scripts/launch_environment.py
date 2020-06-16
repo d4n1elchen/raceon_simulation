@@ -1,16 +1,22 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
+import rospkg
+rospack = rospkg.RosPack()
+
+import os
 import rospy
 import roslaunch
 from std_msgs.msg import Int8
 from raceon_simulation.msg import LapFinish
+
+import track_generation as tg
 
 rospy.init_node('simulation_worker', anonymous=True)
 
 uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
 roslaunch.configure_logging(uuid)
 
-cli_args = ['raceon_simulation', 'raceon_simulation_pos_est_pid.launch', 'speed:=200', 'kp:=0.10']
+cli_args = ['raceon_simulation', 'raceon_simulation_pos_est_pid_vis.launch', 'speed:=200', 'kp:=0.10']
 roslaunch_file = roslaunch.rlutil.resolve_launch_arguments(cli_args)[0]
 roslaunch_args = cli_args[2:]
 
@@ -27,6 +33,10 @@ def finish_callback(msg):
     launch.stop()
 
 rospy.Subscriber('/simulation/lap_finish', LapFinish, finish_callback, queue_size=10)
+
+filename = os.path.join(rospack.get_path('raceon_simulation'), 'track', 'final_track.txt')
+track = tg.Track(filename)
+track.spawn()
 
 try:
   launch.spin()
