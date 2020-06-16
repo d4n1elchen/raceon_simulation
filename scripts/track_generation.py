@@ -10,14 +10,16 @@ from gazebo_msgs.srv import SpawnModel
 from geometry_msgs.msg import Pose
 from tf.transformations import quaternion_from_euler
 
+WIDTH = LENGTH = 1.21
+
 class Segment:
 
     def __init__(self, type, rotate = 0):
         self.type = type
         self.model_path = os.path.join(rospack.get_path('racecar_description'), 'models')
         self.rotate = rotate
-        self.width = 1.21
-        self.length = 1.21
+        self.width = WIDTH
+        self.length = LENGTH
 
     def get_sdf(self):
         with open(os.path.join(self.model_path, 'segment_{}'.format(self.type), 'model.sdf'), 'r') as f:
@@ -55,7 +57,7 @@ class Track:
                         row.append(Segment('turn', np.radians(90)))
 
                     if len(cell) > 1 and cell[1] == 'S':
-                        self.start = [i, j]
+                        self.start = [i * WIDTH, j * LENGTH]
 
                 self.pattern.append(row)
 
@@ -84,9 +86,9 @@ class Track:
                 except (rospy.ServiceException) as e:
                     print ("/gazebo/spawn_sdf_model service call failed")
 
-                y += row[0].width
+                y += WIDTH
             y = 0
-            x += row[0].length
+            x += LENGTH
 
 
     def test_terminate(self, position):
