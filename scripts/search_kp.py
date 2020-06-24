@@ -3,45 +3,31 @@
 import rospy
 import roslaunch
 import numpy as np
-from std_msgs.msg import Int8
-from raceon_simulation.msg import LapFinish
+from launch_environment import SimulationLauncher
 
-rospy.init_node('simulation_worker', anonymous=True)
+rospy.init_node('simulation_worker')
 
-uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
-roslaunch.configure_logging(uuid)
+control_node = roslaunch.core.Node('raceon', 'control.py', 'control')
+sl = SimulationLauncher(launch_file='raceon_simulation_pos_est.launch', track_file='final_track.txt', control_node=control_node, gui=True)
 
-launch = roslaunch.scriptapi.ROSLaunch()
-
-# Start timer node
-node = roslaunch.core.Node('raceon_simulation', 'lap_timer.py', output='screen')
+speed_list = np.linspace(200, 300, 10)
+kp_list = np.linspace(1, 20, 10)
 
 time = []
 success = []
-Kp = np.arange(1, 31, 3)
 
-def finish_callback(msg):
-    success.append(msg.success)
-    time.append(msg.time)
-    launch.stop()
+for speed in speed_list:
+    t = []
+    s = []
 
-rospy.Subscriber('/simulation/lap_finish', LapFinish, finish_callback, queue_size=10)
+    for kp in kp_list:
+        sl.set_param("/control/motor_speed", float(speed))
+        sl.set_param("/control/kp", float(kp))
+        sl.start()
 
-for kp in Kp:
-    cli_args = ['raceon_simulation', 'raceon_simulation_pos_est_pid.launch', '--log', 'speed:=200', 'kp:={}'.format(kp)]
-    roslaunch_file = roslaunch.rlutil.resolve_launch_arguments(cli_args)[0]
-    roslaunch_args = cli_args[2:]
+        result = sl.get_last_result()
+        t.append(result['time'])
+        s.append(result['success'])
 
-    launch.parent = roslaunch.parent.ROSLaunchParent(uuid, [(roslaunch_file, roslaunch_args)])
-
-    launch.start()
-    launch.launch(node)
-    try:
-        launch.spin()
-    finally:
-        # After Ctrl+C, stop all nodes from running
-        launch.stop()
-
-print(Kp)
-print(success)
-print(time)
+    time.append(t)
+    success.append(s)

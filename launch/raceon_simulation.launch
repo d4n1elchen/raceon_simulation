@@ -1,4 +1,5 @@
 <launch>
+    <arg name="gui" default="False"/>
 
     <param name="topic_name_camera_image" value="camera/image" />
     <param name="topic_name_camera_info" value="camera/camera_info" />
@@ -7,7 +8,7 @@
 
     <include file="$(find racecar_gazebo)/launch/raceon.launch">
         <arg name="world_name" value="raceon_empty"/>
-        <arg name="gui" value="true"/>
+        <arg name="gui" value="$(arg gui)"/>
         <arg name="paused" value="true"/>
     </include>
 
