@@ -3,6 +3,7 @@
 import rospkg
 rospack = rospkg.RosPack()
 
+import signal
 import os
 import rospy
 import roslaunch
@@ -53,6 +54,13 @@ class SimulationLauncher:
         # Parameter list
         self.param = {}
 
+        # Register interrupt handler
+        self.interrupt = False
+        def handler(signum, frame):
+            self.interrupt = True
+            self.stop()
+        signal.signal(signal.SIGINT, handler)
+
     def start(self):
         if self.control_node != None:
             control_process = self.launch.launch(self.control_node)
@@ -61,11 +69,8 @@ class SimulationLauncher:
         self.sim.unpause()
 
         rospy.loginfo('Started a new episode')
-        while not self.sim.is_paused:
-            try:
-                self.launch.spin_once()
-            except Exception as e:
-                self.sim.pause()
+        while not self.interrupt and not self.sim.is_paused:
+            self.launch.spin_once()
         rospy.loginfo('One episode finished')
         if self.control_node != None:
             control_process.stop()
