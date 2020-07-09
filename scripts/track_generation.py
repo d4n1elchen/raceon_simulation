@@ -41,7 +41,7 @@ class Segment(object):
         self.width = WIDTH
         self.length = LENGTH
 
-        self.edge_dist = 0.4
+        self.edge_dist = 0.2
         self.track_width = self.width - self.edge_dist * 2
 
     def get_sdf(self):
@@ -199,6 +199,7 @@ class Track:
         col = int(position.y / LENGTH + 0.5)
 
         if row < 0 or col < 0 or row >= len(self.pattern) or col >= len(self.pattern[row]):
+            print(row, col)
             return True
 
         local_pos = copy.deepcopy(position)

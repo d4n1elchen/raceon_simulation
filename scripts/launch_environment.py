@@ -4,6 +4,7 @@ import rospkg
 rospack = rospkg.RosPack()
 
 import signal
+import time
 import os
 import rospy
 import roslaunch
@@ -61,19 +62,36 @@ class SimulationLauncher:
             self.stop()
         signal.signal(signal.SIGINT, handler)
 
+        self.finished = False
+
     def start(self):
-        if self.control_node != None:
-            control_process = self.launch.launch(self.control_node)
-        self.sim.reset()
+        self.lap_timer.pause()
+        self.sim.pause()
+
         self.lap_timer.reset()
+        self.sim.reset()
+
+        self.lap_timer.unpause()
         self.sim.unpause()
+        self.finished = False
+
+        if self.control_node != None:
+            self.control_process = self.launch.launch(self.control_node)
 
         rospy.loginfo('Started a new episode')
-        while not self.interrupt and not self.sim.is_paused:
+        while not self.interrupt and not self.finished:
             self.launch.spin_once()
-        rospy.loginfo('One episode finished')
+
         if self.control_node != None:
-            control_process.stop()
+            self.control_process.stop()
+            time.sleep(1)
+            while self.control_process.is_alive():
+                pass
+
+        self.lap_timer.pause()
+        self.sim.pause()
+
+        rospy.loginfo('One episode finished')
 
     def set_param(self, param, value):
         rospy.set_param(param, value)
@@ -83,9 +101,12 @@ class SimulationLauncher:
         self.launch.stop()
 
     def finish_callback(self, msg):
+        rospy.loginfo('Finish message received')
+
         self.episode += 1
         self.result.append({'param': self.param, 'success': msg.success, 'time': msg.time})
-        self.sim.pause()
+
+        self.finished = True
 
     def get_last_result(self):
         return self.result[-1]

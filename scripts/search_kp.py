@@ -10,8 +10,8 @@ rospy.init_node('simulation_worker')
 control_node = roslaunch.core.Node('raceon', 'control.py', 'control')
 sl = SimulationLauncher(launch_file='raceon_simulation_pos_est.launch', track_file='final_track.txt', control_node=control_node, gui=True)
 
-speed_list = np.linspace(200, 300, 10)
-kp_list = np.linspace(1, 20, 10)
+speed_list = np.linspace(200, 300, 5)
+kp_list = np.linspace(1, 20, 5)
 
 time = []
 success = []
@@ -21,6 +21,7 @@ for speed in speed_list:
     s = []
 
     for kp in kp_list:
+        print("Running kp = {} in speed = {}".format(kp, speed))
         sl.set_param("/control/motor_speed", float(speed))
         sl.set_param("/control/kp", float(kp))
         sl.start()
@@ -31,3 +32,6 @@ for speed in speed_list:
 
     time.append(t)
     success.append(s)
+
+print(time)
+print(success)
