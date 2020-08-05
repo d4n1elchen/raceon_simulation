@@ -14,4 +14,12 @@
 
     <node pkg="raceon_simulation" name="racecar_actuation" type="racecar_actuation.py" output="log" />
 
+    <group ns="camera/image" >
+        <rosparam param="disable_pub_plugins">
+            - 'image_transport/compressedDepth'
+            - 'image_transport/theora'
+        </rosparam>
+    </group>
+    <node pkg="rosbag" type="record" name="record_simulation" output="screen" args="--all -o /tmp/raceon_simulation"/>
+
 </launch>

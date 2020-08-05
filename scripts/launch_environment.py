@@ -113,7 +113,7 @@ class SimulationLauncher:
 
 if __name__ == "__main__":
     rospy.init_node('simulation_worker')
-    sl = SimulationLauncher(launch_file='raceon_simulation_pos_est_pid.launch', track_file='final_track.txt', gui=True)
+    sl = SimulationLauncher(launch_file='raceon_simulation_pos_est_pid.launch', track_file='final_track.txt', gui=False)
     sl.set_param("/control/motor_speed", 200)
     sl.set_param("/control/kp", 10)
     try:
