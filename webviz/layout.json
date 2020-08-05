@@ -1,0 +1,90 @@
+{
+  "layout": {
+    "direction": "row",
+    "first": "ImageViewPanel!3nrms5",
+    "second": {
+      "direction": "row",
+      "first": "RosOut!1f38b3d",
+      "second": {
+        "first": "Plot!2pzz3qz",
+        "second": {
+          "first": "Plot!3ezfzoc",
+          "second": "Plot!3v05nb7",
+          "direction": "column"
+        },
+        "direction": "column",
+        "splitPercentage": 33.415841584158414
+      },
+      "splitPercentage": 50
+    },
+    "splitPercentage": 29.322916666666664
+  },
+  "savedProps": {
+    "ImageViewPanel!3nrms5": {
+      "cameraTopic": "/camera/image/compressed",
+      "enabledMarkerTopics": [],
+      "customMarkerTopicOptions": [],
+      "scale": 0.2,
+      "transformMarkers": true,
+      "synchronize": false,
+      "mode": "fit",
+      "zoomPercentage": 87.34375,
+      "offset": [
+        0,
+        192.375
+      ]
+    },
+    "Plot!2pzz3qz": {
+      "paths": [
+        {
+          "value": "/position/track.left",
+          "enabled": true,
+          "timestampMethod": "receiveTime"
+        },
+        {
+          "value": "/position/track.right",
+          "enabled": true,
+          "timestampMethod": "receiveTime"
+        }
+      ],
+      "minYValue": "",
+      "maxYValue": "",
+      "showLegend": true,
+      "xAxisVal": "timestamp"
+    },
+    "Plot!3ezfzoc": {
+      "paths": [
+        {
+          "value": "/position/pose.position.x",
+          "enabled": true,
+          "timestampMethod": "receiveTime"
+        }
+      ],
+      "minYValue": "",
+      "maxYValue": "",
+      "showLegend": true,
+      "xAxisVal": "timestamp"
+    },
+    "Plot!3v05nb7": {
+      "paths": [
+        {
+          "value": "/control.steering_angle",
+          "enabled": true,
+          "timestampMethod": "receiveTime"
+        }
+      ],
+      "minYValue": "",
+      "maxYValue": "",
+      "showLegend": true,
+      "xAxisVal": "timestamp"
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "linkedGlobalVariables": [],
+  "playbackConfig": {
+    "speed": 1,
+    "messageOrder": "receiveTime"
+  },
+  "version": 9
+}
